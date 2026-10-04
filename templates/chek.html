@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Чек № {{ invoice_id }}</title>
+<style>
+  @page { size: A5; margin: 16mm 14mm; }
+  body { color: #23302c; font-size: 10pt; line-height: 1.45; }
+  .head { display: flex; justify-content: space-between; align-items: flex-end;
+          border-bottom: 2px solid #5d7d72; padding-bottom: 8pt; margin-bottom: 14pt; }
+  .salon { font-size: 15pt; font-weight: 600; color: #3e5f54; }
+  .salon small { display: block; font-size: 8.5pt; font-weight: 400; color: #6b7a75; }
+  .num { text-align: right; font-size: 9pt; color: #6b7a75; }
+  .num b { display: block; font-size: 12pt; color: #23302c; }
+  .who { margin-bottom: 12pt; }
+  .who span { color: #6b7a75; }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  th, td { border: 0.6pt solid #c9d4d0; padding: 5pt 6pt; vertical-align: top; }
+  th { background: #eef3f1; font-weight: 600; font-size: 8.5pt; text-align: center; }
+  td { overflow-wrap: anywhere; }
+  td.c { text-align: center; }
+  td.r { text-align: right; white-space: nowrap; }
+  tr { page-break-inside: avoid; }
+  .col-n { width: 7%; } .col-qty { width: 10%; } .col-price, .col-sum { width: 19%; }
+  .total { margin-top: 10pt; text-align: right; font-size: 12pt; }
+  .total b { font-size: 14pt; color: #3e5f54; }
+  .foot { margin-top: 22pt; font-size: 8.5pt; color: #6b7a75; border-top: 0.6pt solid #c9d4d0; padding-top: 6pt; }
+</style>
+</head>
+<body>
+  <div class="head">
+    <div class="salon">Тихая гавань<small>спа-студия, демонстрационный шаблон</small></div>
+    <div class="num">Чек<b>№ {{ invoice_id }}</b>{{ date }}</div>
+  </div>
+
+  <div class="who"><span>Клиент:</span> {{ customer_name }}{% if master is defined and master %}<br><span>Мастер:</span> {{ master }}{% endif %}</div>
+
+  <table>
+    <colgroup><col class="col-n"><col><col class="col-qty"><col class="col-price"><col class="col-sum"></colgroup>
+    <thead><tr><th>№</th><th>Услуга или товар</th><th>Кол.</th><th>Цена, ₽</th><th>Сумма, ₽</th></tr></thead>
+    <tbody>
+    {% for item in items %}
+      <tr><td class="c">{{ item.n }}</td><td>{{ item.product }}</td><td class="c">{{ item.qty }}</td>
+          <td class="r">{{ item.price }}</td><td class="r">{{ item.sum }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="total">Итого: <b>{{ total }} ₽</b></div>
+
+  <div class="foot">Спасибо, что выбрали нас. Документ собран автоматически из таблицы продаж.</div>
+</body>
+</html>
